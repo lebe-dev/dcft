@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+
+  backend:
+    container_name: app-backend
+    image: docker-registry:5055/app-backend:master-643
+    logging:
+      driver: none
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - APP_ID=XVB
+
+  frontend-ssr:
+    container_name: app-ssr
+    image: docker-registry:5055/app-ssr:master-500
+    depends_on:
+      - backend
+
+  frontend:
+    container_name: app-frontend
+    image: docker-registry:5055/app-frontend:3.2.7
+    depends_on:
+      - backend
+      - frontend-ssr
+    ports:
+      - "28300:80"
+    environment:
+      - APP_ID=XVB
