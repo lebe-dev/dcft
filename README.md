@@ -1,21 +1,23 @@
 # Docker Compose File Tool
 
-Manage docker-compose.yml file.
+Multi-tool for docker-compose.yml file.
 
 ## Features
 
-1. Replace image and tag for service
+1. Replace tag for service image
 
 ## Usage
 
-### Replace image and tag for service
+### Replace tag for service image
 
-dcft -r <service> <image> <tag>
+```
+dcft -r <service> <tag>
+```
 
 Example:
 
 ```
-dcft -ri backend registry.domain.com/app-frontend 2.1.7
+dcft -ri backend 2.1.7
 ```
 
-Set image and tag `registry.domain.com/app-frontend:2.1.7` for service `backend`
+Update tag to `2.1.7` for service `backend` image.
