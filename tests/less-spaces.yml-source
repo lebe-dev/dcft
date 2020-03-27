@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+
+ backend:
+   container_name: app-backend-stage
+   image: your.registry.ru/app-backend:R3.6.1-1
+   restart: always
+   logging:
+     driver: none
+   volumes:
+     - ./data:/app/data
+     - ./server.id:/app/server.id
+     - ./logs:/app/logs
+   environment:
+    - ORACLE_HOST=192.168.0.141
+    - ORACLE_USERNAME=hermitage
+    - ORACLE_PASSWORD=h
+    - ORACLE_SID=orcl2
+    - ISS_APP_ID=VA
+
+ frontend-ssr:
+   container_name: ssr-stage
+   image: your.registry.ru/app-ssr:master-349
+   restart: always
+   logging:
+     options:
+       max-size: 128m
+   depends_on:
+    - backend
+
+ frontend:
+   container_name: app-frontend-stage
+   image: your.registry.ru/app-frontend:master-349
+   restart: always
+   logging:
+     options:
+       max-size: 128m
+   depends_on:
+    - backend
+    - frontend-ssr
+   ports:
+    - "31001:80"

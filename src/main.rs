@@ -47,7 +47,15 @@ fn main() {
 
             println!("tag '{}'", tag);
 
-            replace_tag_for_service_image(service_name, tag);
+            let compose_file_path = Path::new("docker-compose.yml");
+
+            if replace_tag_for_service_image(compose_file_path, service_name, tag) {
+                println!("service image tag successfully replaces")
+
+            } else {
+                println!("unable to replace service image tag");
+                exit(ERROR_EXIT_CODE);
+            }
         }
         None => {}
     }
@@ -58,10 +66,8 @@ fn main() {
     }
 }
 
-fn replace_tag_for_service_image(service_name: &str, tag: &str) -> bool {
+fn replace_tag_for_service_image(compose_file_path: &Path, service_name: &str, tag: &str) -> bool {
     let mut result = false;
-
-    let compose_file_path = Path::new("docker-compose.yml");
 
     let compose_file = File::open(compose_file_path)
                                   .expect("unable to open docker-compose.yml file");
@@ -81,9 +87,12 @@ fn replace_tag_for_service_image(service_name: &str, tag: &str) -> bool {
         let mut flag = false;
 
         if !result && inside_service_section && tag_row_pattern.is_match(&row) {
+            println!("image row has been found");
             let groups = tag_row_pattern.captures_iter(&row).next().unwrap();
 
             let current_tag = String::from(&groups[1]);
+
+            println!("current tag: '{}'", &current_tag);
 
             let replace_result = row.replace(&current_tag, tag);
 
@@ -95,7 +104,8 @@ fn replace_tag_for_service_image(service_name: &str, tag: &str) -> bool {
             flag = true;
         }
 
-        if !inside_service_section && service_row_pattern.is_match(&row) {
+        if !result && !inside_service_section && service_row_pattern.is_match(&row) {
+            println!("service '{}' has been found", service_name);
             inside_service_section = true;
         }
 
@@ -112,10 +122,10 @@ fn replace_tag_for_service_image(service_name: &str, tag: &str) -> bool {
 }
 
 fn get_service_row_regex(service_name: &str) -> Regex {
-    let pattern = format!("\\s+({}):\\s?$", service_name);
+    let pattern = format!("^[ \t]+({}):", service_name);
     return Regex::new(&pattern).unwrap()
 }
 
 fn get_tag_row_regex() -> Regex {
-    return Regex::new("\\s+image: .*/.*:(.*)$").unwrap()
+    return Regex::new("\\s+image: .*/.*:(.*)").unwrap()
 }
