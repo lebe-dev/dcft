@@ -17,7 +17,7 @@ dcft -r <service> <tag>
 Example:
 
 ```
-dcft -ri backend 2.1.7
+dcft -rt backend 2.1.7
 ```
 
-Update tag to `2.1.7` for service `backend` image.
+Update image tag to `2.1.7` for service `backend` image.
