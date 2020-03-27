@@ -40,12 +40,7 @@ fn main() {
             command_matched = true;
 
             let service_name = args.value_of(SERVICE_NAME_ARGUMENT).unwrap();
-
-            println!("service name '{}'", service_name);
-
             let tag = args.value_of(TAG_ARGUMENT).unwrap();
-
-            println!("tag '{}'", tag);
 
             let compose_file_path = Path::new("docker-compose.yml");
 
@@ -53,7 +48,9 @@ fn main() {
                 println!("service image tag successfully replaces")
 
             } else {
-                println!("unable to replace service image tag");
+                println!(
+                    "unable to replace service image tag, possible reason - invalid service name"
+                );
                 exit(ERROR_EXIT_CODE);
             }
         }
@@ -67,6 +64,7 @@ fn main() {
 }
 
 fn replace_tag_for_service_image(compose_file_path: &Path, service_name: &str, tag: &str) -> bool {
+    println!("replace image tag to '{}' for service '{}'", &tag, &service_name);
     let mut result = false;
 
     let compose_file = File::open(compose_file_path)
