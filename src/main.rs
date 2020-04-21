@@ -125,5 +125,5 @@ fn get_service_row_regex(service_name: &str) -> Regex {
 }
 
 fn get_tag_row_regex() -> Regex {
-    return Regex::new("\\s+image: .*/.*:(.*)").unwrap()
+    return Regex::new("^\\s+image: .*/.*:(.*)").unwrap()
 }

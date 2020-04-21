@@ -8,6 +8,7 @@ services:
    restart: always
    logging:
      driver: none
+
    volumes:
      - ./data:/app/data
      - ./server.id:/app/server.id

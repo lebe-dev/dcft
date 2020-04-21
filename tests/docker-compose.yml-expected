@@ -4,6 +4,7 @@ services:
 
   backend:
     container_name: app-backend
+    # image: docker-registry:5055/app-backend:master-233
     image: docker-registry:5055/app-backend:master-123
     logging:
       driver: none
