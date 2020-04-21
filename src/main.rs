@@ -19,7 +19,7 @@ fn main() {
     let mut command_matched = false;
 
     let matches = App::new("Docker Compose File Tool")
-        .version("0.1.1")
+        .version("0.1.2")
         .about("Multi-tool for docker-compose.yml file")
         .subcommand(SubCommand::with_name(REPLACE_TAG_COMMAND)
             .about("replace image tag for service")
